@@ -14,6 +14,6 @@ router.post("/create", createStake);
 router.get("/probabilities", getProbabilityTrends);
 
 // Route to get user's stakes
-router.get("/user/:address", getUserStakes);
+router.get("/user/:userAddress", getUserStakes);
 
 export default router;
