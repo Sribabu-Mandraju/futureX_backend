@@ -46,11 +46,28 @@ const options = {
   apis: ["./routes/*.js"], // Path to your API routes (adjust as needed)
 };
 
-// Use Swagger UI to serve documentation
+// CORS configuration - allow requests from any origin
+const corsOptions = {
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
 
-// Middleware
-app.use(helmet());
-app.use(cors());
+// Apply middleware - Note: CORS should be before other middleware like helmet
+app.use(cors(corsOptions));
+
+// Pre-flight requests
+app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
+
+app.use(helmet({
+  // Modify CSP to be compatible with CORS
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginEmbedderPolicy: false
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("combined"));
@@ -59,6 +76,8 @@ app.use(morgan("combined"));
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit to 100 requests per window
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 app.use(limiter);
 
@@ -67,12 +86,26 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to the secure API" });
 });
 
-app.use("/stake", stakeRoutes);
-app.use("/stakeStatus",stakeStatusRoutes)
+// Add CORS headers to all responses for debugging purposes
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  next();
+});
 
+app.use("/stake", stakeRoutes);
+app.use("/stakeStatus", stakeStatusRoutes);
+
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something broke!");
+});
+
+// Handle 404s
+app.use((req, res) => {
+  res.status(404).send("Route not found");
 });
 
 // Start the server
