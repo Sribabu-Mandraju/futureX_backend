@@ -114,3 +114,37 @@ export const getUserStakes = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const updateIsClaimed = async (req, res) => {
+  try {
+    const { eventAddress, userAddress } = req.body;
+
+    if (!eventAddress || !userAddress) {
+      return res
+        .status(400)
+        .json({ message: "Event address and user address are required." });
+    }
+
+    // Find and update the stake
+    const updatedStake = await Stake.findOneAndUpdate(
+      { stakeAddress: eventAddress, userAddress, isClaimed: false }, // Only update if it's not already claimed
+      { isClaimed: true },
+      { new: true }
+    );
+
+    if (!updatedStake) {
+      return res
+        .status(404)
+        .json({ message: "No eligible stake found to update." });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Stake updated successfully.", stake: updatedStake });
+  } catch (error) {
+    console.error("Error updating isClaimed:", error);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
