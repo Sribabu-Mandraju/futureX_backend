@@ -1,12 +1,12 @@
-import stakeStatusModels from "../models/stakeStatus.models.js";
+import StakeStatus from "../models/stakeStatus.models.js";
 
 // Add a new stake to activeStakes
 export const addActiveStake = async (req, res) => {
   try {
-    const { stakeAddress } = req.body;
+    const { stakeAddress, category } = req.body;
 
-    if (!stakeAddress) {
-      return res.status(400).json({ message: "Stake address is required." });
+    if (!stakeAddress || !category) {
+      return res.status(400).json({ message: "Stake address and category are required." });
     }
 
     // Find or create the stake status document
@@ -16,7 +16,7 @@ export const addActiveStake = async (req, res) => {
     }
 
     // Add new stake to activeStakes
-    stakeStatus.activeStakes.push(stakeAddress);
+    stakeStatus.activeStakes.push({ stakeAddress, category });
     await stakeStatus.save();
 
     res.status(200).json({
@@ -43,15 +43,15 @@ export const resolveStake = async (req, res) => {
       return res.status(404).json({ message: "No stake status found." });
     }
 
-    // Check if stake exists in activeStakes
-    const index = stakeStatus.activeStakes.indexOf(stakeAddress);
+    // Find the stake in activeStakes
+    const index = stakeStatus.activeStakes.findIndex((stake) => stake.stakeAddress === stakeAddress);
     if (index === -1) {
       return res.status(404).json({ message: "Stake not found in activeStakes." });
     }
 
-    // Remove stake from activeStakes and add it to resolvedStakes
-    stakeStatus.activeStakes.splice(index, 1);
-    stakeStatus.resolvedStakes.push(stakeAddress);
+    // Move stake to resolvedStakes
+    const [resolvedStake] = stakeStatus.activeStakes.splice(index, 1);
+    stakeStatus.resolvedStakes.push(resolvedStake);
     await stakeStatus.save();
 
     res.status(200).json({

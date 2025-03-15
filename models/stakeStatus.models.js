@@ -4,8 +4,18 @@ const { Schema, model } = mongoose;
 
 const StakeStatusSchema = new Schema(
   {
-    activeStakes: { type: [String], default: [] }, // Array of active stake IDs
-    resolvedStakes: { type: [String], default: [] }, // Array of resolved stake IDs
+    activeStakes: [
+      {
+        stakeAddress: { type: String, required: true },
+        category: { type: String, required: true },
+      },
+    ],
+    resolvedStakes: [
+      {
+        stakeAddress: { type: String, required: true },
+        category: { type: String, required: true },
+      },
+    ],
   },
   { timestamps: true }
 );
