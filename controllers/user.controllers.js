@@ -25,6 +25,9 @@ export const createUser = async (req, res) => {
   }
 };
 
+
+// ....
+
 /**
  * Fetch user details by wallet_address
  */
