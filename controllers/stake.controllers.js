@@ -3,7 +3,12 @@ import Stake from "../models/stake.models.js";
 // Create a new stake
 export const createStake = async (req, res) => {
   try {
-    const { stakeAddress, stakedAmount, userAddress, selectedOption } = req.body;
+    const {
+      stakeAddress,
+      stakedAmount,
+      userAddress,
+      selectedOption,
+    } = req.body;
 
     // Validate required fields
     if (!stakeAddress || !stakedAmount || !userAddress || !selectedOption) {
@@ -19,19 +24,25 @@ export const createStake = async (req, res) => {
     });
     await newStake.save();
 
-    res.status(201).json({ message: "Stake created successfully.", stake: newStake });
+    res
+      .status(201)
+      .json({ message: "Stake created successfully.", stake: newStake });
   } catch (error) {
-    res.status(500).json({ message: "Error creating stake", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error creating stake", error: error.message });
   }
 };
 
 // Get probabilities of YES and NO stakes
 export const getProbabilityTrends = async (req, res) => {
   try {
-    const { eventAddress, interval = 10 } = req.query; // Interval in minutes
+    const { eventAddress, interval = 30 } = req.query; // Interval in minutes
 
     if (!eventAddress) {
-      return res.status(400).json({ message: "eventAddress query param is required." });
+      return res
+        .status(400)
+        .json({ message: "eventAddress query param is required." });
     }
 
     const intervalMs = interval * 60 * 1000; // Convert minutes to milliseconds
@@ -84,5 +95,22 @@ export const getProbabilityTrends = async (req, res) => {
       message: "Error fetching probability trends",
       error: error.message,
     });
+  }
+};
+
+export const getUserStakes = async (req, res) => {
+  try {
+    const { userAddress } = req.params; // Extract userAddress from request params
+
+    if (!userAddress) {
+      return res.status(400).json({ message: "User address is required" });
+    }
+
+    const stakes = await Stake.find({ userAddress });
+
+    return res.status(200).json(stakes);
+  } catch (error) {
+    console.error("Error fetching user stakes:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
