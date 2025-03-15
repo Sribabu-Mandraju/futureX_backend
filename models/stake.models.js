@@ -8,6 +8,7 @@ const StakeSchema = new Schema(
     stakedAmount: { type: Number, required: true },
     userAddress: { type: String, required: true },
     selectedOption: { type: String, enum: ["YES", "NO"], required: true },
+    isClaimed: { type: Boolean, default: false }, // New field added
   },
   { timestamps: true }
 );
