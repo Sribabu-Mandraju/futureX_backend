@@ -7,7 +7,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 
 import stakeRoutes from "./routes/stake.routes.js";
-import stateStatusRoutes from "./routes/stakeStatus.routes.js";
+import stakeStatusRoutes from "./routes/stakeStatus.routes.js";
 
 // Initialize dotenv for environment variables
 dotenv.config();
@@ -68,6 +68,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/stake", stakeRoutes);
+app.use("/stakeStatus",stakeStatusRoutes)
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
