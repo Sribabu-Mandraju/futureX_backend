@@ -37,7 +37,7 @@ export const createStake = async (req, res) => {
 // Get probabilities of YES and NO stakes
 export const getProbabilityTrends = async (req, res) => {
   try {
-    const { eventAddress, interval = 30 } = req.query; // Interval in minutes
+    const { eventAddress, interval = 5 } = req.query; // Interval in minutes
 
     if (!eventAddress) {
       return res
