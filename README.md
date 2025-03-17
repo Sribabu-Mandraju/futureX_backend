@@ -83,7 +83,7 @@ You can also access the deployed backend here: [FuturaX Backend](https://your-de
  │   ├── 📂 models        # Database models (MongoDB)
  │   ├── index.js        # Server entry point
  ├── 📜 package.json     # Project dependencies
- ├── 📜 .env.example     # Sample environment variables
+ ├── 📜 .env             # Sample environment variables
  ├── 📜 README.md        # Project documentation
  ├── 📜 .gitignore       # Files to ignore in version control
 ```
