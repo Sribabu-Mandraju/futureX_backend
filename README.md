@@ -20,7 +20,7 @@ Follow these steps to set up the backend locally:
 ### 1. Clone the Repository
 
 ```sh
-git clone https://github.com/your-repo/futurax-backend.git
+git clone https://github.com/Sribabu-Mandraju/futureX_backend.git
 cd futurax-backend
 ```
 
@@ -68,7 +68,7 @@ USDC_FEE_ADDRESS=0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238
 npm run dev
 ```
 
-The server will start at `http://localhost:5000/`.
+The server will start at `http://localhost:8080/`.
 
 ### Live Deployment
 
