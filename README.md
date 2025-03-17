@@ -45,7 +45,6 @@ Create a `.env` file in the root directory and add the following:
 ```env
 SEPOLIA_RPC_URL=https://eth-sepolia.g.alchemy.com/v2/XPgw_qPpyP6jd1vh_udqemcGWTyK0zwQ
 MAINNET_RPC_URL=https://eth-mainnet.g.alchemy.com/v2/XPgw_qPpyP6jd1vh_udqemcGWTyK0zwQ
-PRIVATE_KEY= bla bla bla................................
 ETHERSCAN_API_KEY=DIK1T2J6FRN77WBQSBITNTNHKS542NFQT2
 COINMARKETCAP=47bab54c-249d-4464-b513-ba44a77db289
 CODEX=d5f712c5641286378e36c171d5e5e8d16e49bf4a
